@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<script>
+  function copyApiToken() {
+    const apiTokenElement = document.getElementById('api_token');
+    apiTokenElement.select();
+    document.execCommand('copy');
+
+    const alert = document.getElementById('alert');
+    alert.style.display = 'block';
+    setTimeout(() => {
+      alert.style.display = 'none';
+    }, 3000);
+  }
+  
+</script>
+
+<h1>Account</h1>
+
+<div id="alert" class="alert alert-success" role="alert" style="display: none;">
+  API Token copied to clipboard!
+</div>
+<label class="form-label" for="api_token">Your API Token</label>
+<div class="input-group mb-3">
+  <input type="text" class="form-control" id="api_token" value="{{ token }}" readonly>
+  <button class="btn btn-outline-secondary" type="button" onclick="copyApiToken()">Copy API Token</button>
+</div>
+<hr class="my-4">
+
+<form method="POST" action="{{ url_for('update_account') }}">
+  <div class="row g-3">
+    <div class="col-12">
+      <label class="form-label" for="email">Email address</label>
+      <input type="email" class="form-control" id="email" name="email" value="{{ current_user.email }}" required>
+    </div>
+    <div class="col-6">
+      <label class="form-label" for="password">New Password</label>
+      <input type="password" class="form-control" id="password" name="password" placeholder="Enter new password">
+    </div>
+    <div class="col-6">
+      <label class="form-label" for="confirm_password">Confirm Password</label>
+      <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm new password">
+    </div>
+    <div class="col-12">
+      <hr class="my-4">
+      <label class="form-label" for="credit_card">Credit Card Number</label>
+      <input type="text" class="form-control" id="credit_card" name="credit_card" placeholder="Enter credit card number" value="{{ credit_card }}" required>
+    </div>
+    <div class="col-12">
+      <hr class="my-4">
+      <label class="form-label"  for="monthly_budget">Monthly Budget</label>
+      <div class="input-group">
+        <span class="input-group-text">$</span>
+        <input type="number" step="0.01" class="form-control" id="monthly_budget" name="monthly_budget" value="{{ '%.2f' | format(monthly_budget) }}" placeholder="Enter monthly budget" required>
+      </div>
+    </div>
+    <div class="col-12">
+      <hr class="my-4">
+      <button type="submit" class="w-100 btn btn-primary btn-lg">Update Profile</button>
+    </div>
+   </div>
+</form>
+<hr class="my-4">
+
+<h2>Monthly Spends</h2>
+<table class="table table-striped table-sm">
+  <thead>
+    <tr>
+      <th>Month</th>
+      <th>Spent</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for monthly_spend in monthly_spends|reverse %}
+      <tr>
+        <td>{{ monthly_spend.month }}</td>
+        <td>${{ '%.2f' | format(monthly_spend.spend) }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

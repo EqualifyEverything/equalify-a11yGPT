@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Welcome to a11yGPT</h1>
+    {% if not current_user.is_authenticated %}
+        <p>Please <a href="{{ url_for('login') }}">log in</a> to continue.</p>
+        <p>Don't have an account? <a href="{{ url_for('register') }}">Register here</a>.</p>
+    {% endif  %}
+{% endblock %}

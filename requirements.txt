@@ -1,0 +1,6 @@
+Flask
+Flask-SQLAlchemy
+flask-login
+requests
+urllib3==1.26.7
+openai
